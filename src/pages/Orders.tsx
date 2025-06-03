@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Eye, Edit, Truck, Download } from "lucide-react";
+import { Search, Filter, Eye, Edit, Car, Download } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 
 const Orders = () => {
@@ -125,6 +126,12 @@ const Orders = () => {
             <p className="text-gray-600 mt-2">Track and manage orders from all customer types</p>
           </div>
           <div className="flex gap-2 mt-4 sm:mt-0">
+            <Link to="/track-order">
+              <Button variant="outline">
+                <Car className="h-4 w-4 mr-2" />
+                Track Order
+              </Button>
+            </Link>
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
               Export Orders
@@ -267,15 +274,21 @@ const Orders = () => {
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex gap-1">
-                          <Button size="sm" variant="outline">
-                            <Eye className="h-3 w-3" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Edit className="h-3 w-3" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Truck className="h-3 w-3" />
-                          </Button>
+                          <Link to={`/orders/${order.id}`}>
+                            <Button size="sm" variant="outline">
+                              <Eye className="h-3 w-3" />
+                            </Button>
+                          </Link>
+                          <Link to={`/orders/${order.id}/edit`}>
+                            <Button size="sm" variant="outline">
+                              <Edit className="h-3 w-3" />
+                            </Button>
+                          </Link>
+                          <Link to="/track-order">
+                            <Button size="sm" variant="outline">
+                              <Car className="h-3 w-3" />
+                            </Button>
+                          </Link>
                         </div>
                       </td>
                     </tr>
