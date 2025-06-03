@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -240,7 +239,6 @@ const Index = () => {
                 <li><Link to="/products" className="hover:text-white">Browse Books</Link></li>
                 <li><Link to="/branches" className="hover:text-white">Find Branches</Link></li>
                 <li><Link to="/dashboard" className="hover:text-white">Dashboard</Link></li>
-                <li><Link to="/track-order" className="hover:text-white">Track Order</Link></li>
               </ul>
             </div>
             <div>
@@ -248,7 +246,6 @@ const Index = () => {
               <ul className="space-y-2 text-gray-400">
                 <li>Help Center</li>
                 <li>Contact Support</li>
-                <li><Link to="/track-order" className="hover:text-white">Track Order</Link></li>
               </ul>
             </div>
             <div>

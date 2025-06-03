@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Plus, Filter, Star, ShoppingCart, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 
 const Products = () => {
@@ -149,10 +150,12 @@ const Products = () => {
             <p className="text-gray-600 mt-2">Browse and manage books for all programs and classes</p>
           </div>
           <div className="flex gap-2 mt-4 sm:mt-0">
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Book
-            </Button>
+            <Link to="/add-book">
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Book
+              </Button>
+            </Link>
           </div>
         </div>
 
