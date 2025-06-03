@@ -16,6 +16,7 @@ import {
   BookOpen,
   Bell
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import StatsCard from "@/components/StatsCard";
 
@@ -111,9 +112,11 @@ const Dashboard = () => {
                       </div>
                     ))}
                   </div>
-                  <Button variant="outline" className="w-full mt-4">
-                    View All Orders
-                  </Button>
+                  <Link to="/orders">
+                    <Button variant="outline" className="w-full mt-4">
+                      View All Orders
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 
@@ -146,9 +149,11 @@ const Dashboard = () => {
                       </div>
                     ))}
                   </div>
-                  <Button variant="outline" className="w-full mt-4">
-                    View All Notifications
-                  </Button>
+                  <Link to="/notifications">
+                    <Button variant="outline" className="w-full mt-4">
+                      View All Notifications
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
@@ -183,6 +188,63 @@ const Dashboard = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Students
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-2xl font-bold">1,525</p>
+                  <p className="text-sm text-gray-600 mb-4">Active students</p>
+                  <Link to="/students">
+                    <Button variant="outline" className="w-full">
+                      Manage Students
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5" />
+                    Suppliers
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-2xl font-bold">89</p>
+                  <p className="text-sm text-gray-600 mb-4">Active suppliers</p>
+                  <Link to="/suppliers">
+                    <Button variant="outline" className="w-full">
+                      Manage Suppliers
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="h-5 w-5" />
+                    Books
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-2xl font-bold">25,847</p>
+                  <p className="text-sm text-gray-600 mb-4">Total books</p>
+                  <Link to="/add-book">
+                    <Button variant="outline" className="w-full">
+                      Add New Book
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="orders">
@@ -192,7 +254,13 @@ const Dashboard = () => {
                 <CardDescription>Manage all orders across branches</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Order management interface will be implemented here...</p>
+                <div className="text-center py-8">
+                  <ShoppingCart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">Access the full order management system</p>
+                  <Link to="/orders">
+                    <Button>Go to Orders</Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -204,7 +272,13 @@ const Dashboard = () => {
                 <CardDescription>Track and manage inventory across all locations</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Inventory management interface will be implemented here...</p>
+                <div className="text-center py-8">
+                  <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">Access the full inventory management system</p>
+                  <Link to="/inventory">
+                    <Button>Go to Inventory</Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -216,7 +290,13 @@ const Dashboard = () => {
                 <CardDescription>Comprehensive business reports and insights</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Reports and analytics interface will be implemented here...</p>
+                <div className="text-center py-8">
+                  <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">Access detailed reports and analytics</p>
+                  <Link to="/reports">
+                    <Button>View Reports</Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

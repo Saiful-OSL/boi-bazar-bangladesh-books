@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,13 +80,20 @@ const Index = () => {
               Complete inventory management solution for 108+ educational branches across Bangladesh
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8 py-4">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Browse Books
-              </Button>
+              <Link to="/products">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8 py-4">
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Browse Books
+                </Button>
+              </Link>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4">
                 Access Dashboard
               </Button>
+              <Link to="/track-order">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4">
+                  Track Order
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -232,6 +240,7 @@ const Index = () => {
                 <li><Link to="/products" className="hover:text-white">Browse Books</Link></li>
                 <li><Link to="/branches" className="hover:text-white">Find Branches</Link></li>
                 <li><Link to="/dashboard" className="hover:text-white">Dashboard</Link></li>
+                <li><Link to="/track-order" className="hover:text-white">Track Order</Link></li>
               </ul>
             </div>
             <div>
@@ -239,7 +248,7 @@ const Index = () => {
               <ul className="space-y-2 text-gray-400">
                 <li>Help Center</li>
                 <li>Contact Support</li>
-                <li>Track Order</li>
+                <li><Link to="/track-order" className="hover:text-white">Track Order</Link></li>
               </ul>
             </div>
             <div>
