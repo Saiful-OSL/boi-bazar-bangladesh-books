@@ -179,7 +179,7 @@ const Reports = () => {
                         <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip formatter={(value, name) => [
-                          name === 'sales' ? `৳${(value / 1000).toFixed(0)}K` : value,
+                          name === 'sales' ? `৳${(Number(value) / 1000).toFixed(0)}K` : value,
                           name === 'sales' ? 'Sales' : 'Orders'
                         ]} />
                         <Line type="monotone" dataKey="sales" stroke="#3B82F6" strokeWidth={3} />
@@ -205,7 +205,7 @@ const Reports = () => {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          label={({ name, percent }) => `${name} ${(Number(percent) * 100).toFixed(0)}%`}
                           outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
@@ -237,7 +237,7 @@ const Reports = () => {
                       <XAxis dataKey="category" angle={-45} textAnchor="end" height={80} />
                       <YAxis />
                       <Tooltip formatter={(value, name) => [
-                        name === 'value' ? `৳${(value / 1000).toFixed(0)}K` : value,
+                        name === 'value' ? `৳${(Number(value) / 1000).toFixed(0)}K` : value,
                         name === 'value' ? 'Value' : 'Stock'
                       ]} />
                       <Bar dataKey="stock" fill="#3B82F6" />
@@ -286,7 +286,7 @@ const Reports = () => {
                       <XAxis type="number" />
                       <YAxis dataKey="branch" type="category" width={100} />
                       <Tooltip formatter={(value, name) => [
-                        name === 'sales' ? `৳${(value / 100000).toFixed(1)}L` : value,
+                        name === 'sales' ? `৳${(Number(value) / 100000).toFixed(1)}L` : value,
                         name === 'sales' ? 'Sales' : 'Orders'
                       ]} />
                       <Bar dataKey="sales" fill="#3B82F6" />
