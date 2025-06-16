@@ -27,6 +27,10 @@ import EditOrder from "./pages/EditOrder";
 import ViewStudent from "./pages/ViewStudent";
 import EditStudent from "./pages/EditStudent";
 import Reorder from "./pages/Reorder";
+import SupplierOrderPlacement from "./pages/SupplierOrderPlacement";
+import SupplierOrderView from "./pages/SupplierOrderView";
+import RequisitionRequest from "./pages/RequisitionRequest";
+import IssuePage from "./pages/IssuePage";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +45,8 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/reorder" element={<Reorder />} />
+          <Route path="/supplier-order-placement" element={<SupplierOrderPlacement />} />
+          <Route path="/supplier-orders/:orderId" element={<SupplierOrderView />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:orderId" element={<ViewOrder />} />
           <Route path="/orders/:orderId/edit" element={<EditOrder />} />
@@ -51,6 +57,8 @@ const App = () => (
           <Route path="/students/:studentId/edit" element={<EditStudent />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/branches" element={<Branches />} />
+          <Route path="/requisition-request" element={<RequisitionRequest />} />
+          <Route path="/issue-books" element={<IssuePage />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />

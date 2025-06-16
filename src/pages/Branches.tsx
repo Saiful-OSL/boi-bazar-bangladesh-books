@@ -1,11 +1,11 @@
-
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Phone, Mail, Users, Package, TrendingUp, Building2 } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Users, Package, TrendingUp, Building2, FileText, BookOpen } from "lucide-react";
 import Header from "@/components/Header";
 
 const Branches = () => {
@@ -144,6 +144,18 @@ const Branches = () => {
             <p className="text-gray-600 mt-2">Manage 108+ educational branches across Bangladesh</p>
           </div>
           <div className="flex gap-2 mt-4 sm:mt-0">
+            <Link to="/requisition-request">
+              <Button variant="outline" className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100">
+                <FileText className="h-4 w-4 mr-2" />
+                Request Books
+              </Button>
+            </Link>
+            <Link to="/issue-books">
+              <Button variant="outline" className="bg-green-50 border-green-200 text-green-700 hover:bg-green-100">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Issue Books
+              </Button>
+            </Link>
             <Button>
               <Building2 className="h-4 w-4 mr-2" />
               Add Branch

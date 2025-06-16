@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,13 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AlertTriangle, Package, ShoppingCart, Filter, Search, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 
 const Reorder = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("all");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const lowStockItems = [
     {
@@ -114,6 +114,22 @@ const Reorder = () => {
     return filteredItems
       .filter(item => selectedItems.includes(item.id))
       .reduce((total, item) => total + (item.price * item.suggestedQuantity), 0);
+  };
+
+  const handleCreateReorder = () => {
+    const selectedItemsData = filteredItems.filter(item => selectedItems.includes(item.id));
+    navigate("/supplier-order-placement", { 
+      state: { selectedItems: selectedItemsData }
+    });
+  };
+
+  const handleQuickOrder = (itemId: string) => {
+    const selectedItem = filteredItems.find(item => item.id === itemId);
+    if (selectedItem) {
+      navigate("/supplier-order-placement", { 
+        state: { selectedItems: [selectedItem] }
+      });
+    }
   };
 
   return (
@@ -245,6 +261,7 @@ const Reorder = () => {
                 <Button 
                   disabled={selectedItems.length === 0}
                   className="bg-blue-600 hover:bg-blue-700"
+                  onClick={handleCreateReorder}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Create Reorder ({selectedItems.length})
@@ -308,7 +325,13 @@ const Reorder = () => {
                         </td>
                         <td className="py-4 px-4">
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline">Quick Order</Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleQuickOrder(item.id)}
+                            >
+                              Quick Order
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -342,7 +365,10 @@ const Reorder = () => {
                   <Button variant="outline" onClick={() => setSelectedItems([])}>
                     Clear Selection
                   </Button>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700"
+                    onClick={handleCreateReorder}
+                  >
                     Proceed to Reorder
                   </Button>
                 </div>
