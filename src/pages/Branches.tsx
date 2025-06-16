@@ -5,12 +5,55 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Phone, Mail, Users, Package, TrendingUp, Building2, FileText, BookOpen } from "lucide-react";
+import { Search, MapPin, Phone, Mail, Users, Package, TrendingUp, Building2, FileText, BookOpen, Clock, AlertCircle } from "lucide-react";
 import Header from "@/components/Header";
 
 const Branches = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [regionFilter, setRegionFilter] = useState("all");
+  const [showRequisitions, setShowRequisitions] = useState(false);
+
+  // Mock requisition requests data
+  const requisitionRequests = [
+    {
+      id: "REQ-001",
+      branchId: "BRN-001",
+      branchName: "Dhaka Central Branch",
+      requestDate: "2024-01-15",
+      status: "Pending",
+      books: [
+        { id: "ITM-001", name: "Higher Mathematics - Class XI", quantity: 25, priority: "High" },
+        { id: "ITM-002", name: "Physics Practical Guide", quantity: 15, priority: "Medium" }
+      ],
+      totalItems: 40,
+      requestedBy: "Dr. Rahman Ahmed"
+    },
+    {
+      id: "REQ-002",
+      branchId: "BRN-002",
+      branchName: "Chittagong Branch",
+      requestDate: "2024-01-14",
+      status: "Pending",
+      books: [
+        { id: "ITM-003", name: "Business Studies Foundation", quantity: 30, priority: "High" },
+        { id: "ITM-004", name: "Programming with Python", quantity: 20, priority: "Low" }
+      ],
+      totalItems: 50,
+      requestedBy: "Prof. Fatima Khan"
+    },
+    {
+      id: "REQ-003",
+      branchId: "BRN-003",
+      branchName: "Sylhet Branch",
+      requestDate: "2024-01-13",
+      status: "Partially Fulfilled",
+      books: [
+        { id: "ITM-001", name: "Higher Mathematics - Class XI", quantity: 20, priority: "Medium" }
+      ],
+      totalItems: 20,
+      requestedBy: "Md. Karim Hassan"
+    }
+  ];
 
   const branches = [
     {
@@ -116,6 +159,24 @@ const Branches = () => {
     }
   };
 
+  const getRequisitionStatusColor = (status: string) => {
+    switch (status) {
+      case "Pending": return "bg-orange-100 text-orange-800";
+      case "Partially Fulfilled": return "bg-blue-100 text-blue-800";
+      case "Fulfilled": return "bg-green-100 text-green-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "High": return "bg-red-100 text-red-800";
+      case "Medium": return "bg-yellow-100 text-yellow-800";
+      case "Low": return "bg-green-100 text-green-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  };
+
   const filteredBranches = branches.filter(branch => {
     const matchesSearch = branch.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          branch.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -132,6 +193,11 @@ const Branches = () => {
     totalRevenue: branches.reduce((sum, b) => sum + b.revenue, 0)
   };
 
+  const pendingRequisitions = requisitionRequests.filter(req => req.status === "Pending");
+  const getBranchRequisitions = (branchId: string) => {
+    return requisitionRequests.filter(req => req.branchId === branchId);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -144,16 +210,18 @@ const Branches = () => {
             <p className="text-gray-600 mt-2">Manage 108+ educational branches across Bangladesh</p>
           </div>
           <div className="flex gap-2 mt-4 sm:mt-0">
+            <Button 
+              variant={showRequisitions ? "default" : "outline"}
+              onClick={() => setShowRequisitions(!showRequisitions)}
+              className="bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100"
+            >
+              <Clock className="h-4 w-4 mr-2" />
+              {showRequisitions ? 'Hide' : 'Show'} Requisitions ({pendingRequisitions.length})
+            </Button>
             <Link to="/requisition-request">
               <Button variant="outline" className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100">
                 <FileText className="h-4 w-4 mr-2" />
                 Request Books
-              </Button>
-            </Link>
-            <Link to="/issue-books">
-              <Button variant="outline" className="bg-green-50 border-green-200 text-green-700 hover:bg-green-100">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Issue Books
               </Button>
             </Link>
             <Button>
@@ -162,6 +230,66 @@ const Branches = () => {
             </Button>
           </div>
         </div>
+
+        {/* Pending Requisitions Section */}
+        {showRequisitions && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-orange-500" />
+                Pending Book Requisitions
+              </CardTitle>
+              <CardDescription>
+                Books requested by branches that need to be issued
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {pendingRequisitions.map((req) => (
+                  <div key={req.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="font-semibold">{req.branchName}</h4>
+                        <p className="text-sm text-gray-600">
+                          Requested by {req.requestedBy} • {new Date(req.requestDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Badge className={getRequisitionStatusColor(req.status)}>
+                          {req.status}
+                        </Badge>
+                        <Link to={`/issue-books?branchId=${req.branchId}&requisitionId=${req.id}`}>
+                          <Button size="sm">
+                            <BookOpen className="h-3 w-3 mr-1" />
+                            Issue Books
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {req.books.map((book) => (
+                        <div key={book.id} className="text-sm border rounded p-2">
+                          <div className="font-medium">{book.name}</div>
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-gray-600">Qty: {book.quantity}</span>
+                            <Badge size="sm" className={getPriorityColor(book.priority)}>
+                              {book.priority}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                {pendingRequisitions.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No pending requisitions at the moment
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
@@ -229,90 +357,138 @@ const Branches = () => {
 
         {/* Branches Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredBranches.map((branch) => (
-            <Card key={branch.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg">{branch.name}</CardTitle>
-                    <CardDescription className="flex items-center gap-1 mt-1">
-                      <MapPin className="h-3 w-3" />
-                      {branch.region} Region
-                    </CardDescription>
-                  </div>
-                  <Badge className={getStatusColor(branch.status)}>
-                    {branch.status}
-                  </Badge>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                {/* Location Information */}
-                <div className="space-y-2">
-                  <div className="flex items-start gap-2 text-sm">
-                    <MapPin className="h-3 w-3 text-gray-400 mt-0.5" />
-                    <div className="text-gray-600">{branch.address}</div>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Users className="h-3 w-3 text-gray-400" />
-                    <div>Manager: {branch.manager}</div>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-3 w-3 text-gray-400" />
-                    <div>{branch.phone}</div>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-3 w-3 text-gray-400" />
-                    <div>{branch.email}</div>
-                  </div>
-                </div>
-
-                {/* Performance Metrics */}
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                  <div>
-                    <div className="text-sm text-gray-600">Students</div>
-                    <div className="text-lg font-semibold text-blue-600">{branch.students.toLocaleString()}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600">Inventory</div>
-                    <div className="text-lg font-semibold text-green-600">{branch.inventory.toLocaleString()}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600">Monthly Orders</div>
-                    <div className="text-lg font-semibold">{branch.monthlyOrders}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600">Revenue</div>
-                    <div className="text-lg font-semibold text-purple-600">
-                      ৳{(branch.revenue / 100000).toFixed(1)}L
+          {filteredBranches.map((branch) => {
+            const branchRequisitions = getBranchRequisitions(branch.id);
+            const pendingBranchReqs = branchRequisitions.filter(req => req.status === "Pending");
+            
+            return (
+              <Card key={branch.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-lg">{branch.name}</CardTitle>
+                      <CardDescription className="flex items-center gap-1 mt-1">
+                        <MapPin className="h-3 w-3" />
+                        {branch.region} Region
+                      </CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <Badge className={getStatusColor(branch.status)}>
+                        {branch.status}
+                      </Badge>
+                      {pendingBranchReqs.length > 0 && (
+                        <Badge className="bg-orange-100 text-orange-800">
+                          {pendingBranchReqs.length} Pending
+                        </Badge>
+                      )}
                     </div>
                   </div>
-                </div>
-
-                {/* Additional Info */}
-                <div className="pt-4 border-t">
-                  <div className="text-sm text-gray-600">
-                    Established: {new Date(branch.established).toLocaleDateString()}
+                </CardHeader>
+                
+                <CardContent className="space-y-4">
+                  {/* Location Information */}
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2 text-sm">
+                      <MapPin className="h-3 w-3 text-gray-400 mt-0.5" />
+                      <div className="text-gray-600">{branch.address}</div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Users className="h-3 w-3 text-gray-400" />
+                      <div>Manager: {branch.manager}</div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone className="h-3 w-3 text-gray-400" />
+                      <div>{branch.phone}</div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="h-3 w-3 text-gray-400" />
+                      <div>{branch.email}</div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Actions */}
-                <div className="flex gap-2 pt-4">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    View Details
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <Package className="h-3 w-3 mr-1" />
-                    Inventory
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <TrendingUp className="h-3 w-3 mr-1" />
-                    Reports
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  {/* Requisition Status */}
+                  {branchRequisitions.length > 0 && (
+                    <div className="pt-4 border-t">
+                      <div className="text-sm font-medium text-gray-700 mb-2">Book Requisitions</div>
+                      <div className="space-y-1">
+                        {branchRequisitions.slice(0, 2).map((req) => (
+                          <div key={req.id} className="text-xs bg-gray-50 rounded p-2">
+                            <div className="flex justify-between items-center">
+                              <span>{req.totalItems} books requested</span>
+                              <Badge size="sm" className={getRequisitionStatusColor(req.status)}>
+                                {req.status}
+                              </Badge>
+                            </div>
+                            <div className="text-gray-500 mt-1">
+                              {new Date(req.requestDate).toLocaleDateString()}
+                            </div>
+                          </div>
+                        ))}
+                        {branchRequisitions.length > 2 && (
+                          <div className="text-xs text-gray-500">
+                            +{branchRequisitions.length - 2} more requisitions
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Performance Metrics */}
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                    <div>
+                      <div className="text-sm text-gray-600">Students</div>
+                      <div className="text-lg font-semibold text-blue-600">{branch.students.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-600">Inventory</div>
+                      <div className="text-lg font-semibold text-green-600">{branch.inventory.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-600">Monthly Orders</div>
+                      <div className="text-lg font-semibold">{branch.monthlyOrders}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-600">Revenue</div>
+                      <div className="text-lg font-semibold text-purple-600">
+                        ৳{(branch.revenue / 100000).toFixed(1)}L
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Info */}
+                  <div className="pt-4 border-t">
+                    <div className="text-sm text-gray-600">
+                      Established: {new Date(branch.established).toLocaleDateString()}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2 pt-4">
+                    <Button variant="outline" size="sm" className="flex-1">
+                      View Details
+                    </Button>
+                    <Button variant="outline" size="sm" className="flex-1">
+                      <Package className="h-3 w-3 mr-1" />
+                      Inventory
+                    </Button>
+                    {pendingBranchReqs.length > 0 ? (
+                      <Link to={`/issue-books?branchId=${branch.id}`} className="flex-1">
+                        <Button size="sm" className="w-full bg-green-600 hover:bg-green-700">
+                          <BookOpen className="h-3 w-3 mr-1" />
+                          Issue Requested Books
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button variant="outline" size="sm" className="flex-1" disabled>
+                        <BookOpen className="h-3 w-3 mr-1" />
+                        No Pending Books
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
         
         {filteredBranches.length === 0 && (
