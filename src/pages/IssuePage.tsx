@@ -15,12 +15,12 @@ const IssuePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [issueData, setIssueData] = useState({
-    issuedTo: "",
-    studentId: "",
-    branch: "Dhaka Central",
-    dueDate: "",
-    purpose: "class_assignment",
-    notes: ""
+    requisitionId: "",
+    requestedBy: "",
+    targetBranch: "Dhaka Central",
+    issueQuantity: "",
+    issueDate: "",
+    remarks: ""
   });
 
   const availableBooks = [
@@ -120,7 +120,7 @@ const IssuePage = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Issue Books</h1>
-            <p className="text-gray-600 mt-2">Issue books to students and manage lending</p>
+            <p className="text-gray-600 mt-2">Issue books for requisition requests to branches</p>
           </div>
           <div className="flex gap-2 mt-4 sm:mt-0">
             <Link to="/branches">
@@ -135,33 +135,33 @@ const IssuePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Issue Details */}
+            {/* Requisition Request Details */}
             <Card>
               <CardHeader>
-                <CardTitle>Issue Details</CardTitle>
-                <CardDescription>Specify student and issue information</CardDescription>
+                <CardTitle>Requisition Request Details</CardTitle>
+                <CardDescription>Specify requisition and issue information</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium">Student Name *</label>
+                    <label className="text-sm font-medium">Requisition ID *</label>
                     <Input
-                      value={issueData.issuedTo}
-                      onChange={(e) => setIssueData({...issueData, issuedTo: e.target.value})}
-                      placeholder="Enter student name"
+                      value={issueData.requisitionId}
+                      onChange={(e) => setIssueData({...issueData, requisitionId: e.target.value})}
+                      placeholder="Enter requisition ID (e.g., REQ-001)"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Student ID *</label>
+                    <label className="text-sm font-medium">Requested By *</label>
                     <Input
-                      value={issueData.studentId}
-                      onChange={(e) => setIssueData({...issueData, studentId: e.target.value})}
-                      placeholder="Enter student ID"
+                      value={issueData.requestedBy}
+                      onChange={(e) => setIssueData({...issueData, requestedBy: e.target.value})}
+                      placeholder="Enter requester name"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Branch</label>
-                    <Select value={issueData.branch} onValueChange={(value) => setIssueData({...issueData, branch: value})}>
+                    <label className="text-sm font-medium">Target Branch</label>
+                    <Select value={issueData.targetBranch} onValueChange={(value) => setIssueData({...issueData, targetBranch: value})}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -173,36 +173,31 @@ const IssuePage = () => {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Due Date *</label>
+                    <label className="text-sm font-medium">Issue Date *</label>
                     <Input
                       type="date"
-                      value={issueData.dueDate}
-                      onChange={(e) => setIssueData({...issueData, dueDate: e.target.value})}
+                      value={issueData.issueDate}
+                      onChange={(e) => setIssueData({...issueData, issueDate: e.target.value})}
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="text-sm font-medium">Purpose</label>
-                    <Select value={issueData.purpose} onValueChange={(value) => setIssueData({...issueData, purpose: value})}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {purposes.map(purpose => (
-                          <SelectItem key={purpose.value} value={purpose.value}>
-                            {purpose.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <label className="text-sm font-medium">Issue Quantity *</label>
+                    <Input
+                      type="number"
+                      value={issueData.issueQuantity}
+                      onChange={(e) => setIssueData({...issueData, issueQuantity: e.target.value})}
+                      placeholder="Enter total quantity to issue"
+                      min="1"
+                    />
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Additional Notes</label>
+                  <label className="text-sm font-medium">Remarks</label>
                   <Textarea
-                    placeholder="Any special instructions or conditions..."
-                    value={issueData.notes}
-                    onChange={(e) => setIssueData({...issueData, notes: e.target.value})}
-                    rows={2}
+                    placeholder="Add any special instructions, conditions, or notes for this requisition..."
+                    value={issueData.remarks}
+                    onChange={(e) => setIssueData({...issueData, remarks: e.target.value})}
+                    rows={3}
                   />
                 </div>
               </CardContent>
@@ -214,7 +209,7 @@ const IssuePage = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <CardTitle>Select Books</CardTitle>
-                    <CardDescription>Choose books to issue to the student</CardDescription>
+                    <CardDescription>Choose books to fulfill the requisition request</CardDescription>
                   </div>
                   <div className="flex gap-2">
                     <Button 
@@ -298,31 +293,35 @@ const IssuePage = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                  <span>Student</span>
-                  <span className="font-medium">{issueData.issuedTo || "Not specified"}</span>
+                  <span>Requisition ID</span>
+                  <span className="font-medium">{issueData.requisitionId || "Not specified"}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Student ID</span>
-                  <span className="font-medium">{issueData.studentId || "Not specified"}</span>
+                  <span>Requested By</span>
+                  <span className="font-medium">{issueData.requestedBy || "Not specified"}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Branch</span>
-                  <span className="font-medium">{issueData.branch}</span>
+                  <span>Target Branch</span>
+                  <span className="font-medium">{issueData.targetBranch}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Issue Quantity</span>
+                  <span className="font-medium">{issueData.issueQuantity || "Not specified"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Books Selected</span>
                   <span className="font-medium">{selectedItems.length}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Purpose</span>
-                  <span className="font-medium">
-                    {purposes.find(p => p.value === issueData.purpose)?.label}
-                  </span>
-                </div>
-                {issueData.dueDate && (
+                {issueData.issueDate && (
                   <div className="flex justify-between">
-                    <span>Due Date</span>
-                    <span className="font-medium">{issueData.dueDate}</span>
+                    <span>Issue Date</span>
+                    <span className="font-medium">{issueData.issueDate}</span>
+                  </div>
+                )}
+                {issueData.remarks && (
+                  <div className="pt-2 border-t">
+                    <span className="text-sm text-gray-600">Remarks:</span>
+                    <p className="text-sm font-medium mt-1">{issueData.remarks}</p>
                   </div>
                 )}
               </CardContent>
@@ -355,13 +354,14 @@ const IssuePage = () => {
                   className="w-full"
                   disabled={
                     selectedItems.length === 0 || 
-                    !issueData.issuedTo || 
-                    !issueData.studentId || 
-                    !issueData.dueDate
+                    !issueData.requisitionId || 
+                    !issueData.requestedBy || 
+                    !issueData.issueQuantity ||
+                    !issueData.issueDate
                   }
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Issue Books
+                  Issue Books to Branch
                 </Button>
                 <Button variant="outline" className="w-full">
                   Print Issue Receipt
@@ -378,11 +378,11 @@ const IssuePage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-gray-600 space-y-2">
-                <p>• Maximum 3 books per student</p>
-                <p>• Standard loan period: 14 days</p>
-                <p>• Late return fine: ৳5 per day</p>
-                <p>• Student ID verification required</p>
-                <p>• Damaged books will be charged</p>
+                <p>• Verify requisition ID before issuing</p>
+                <p>• Ensure sufficient stock availability</p>
+                <p>• Match issue quantity with request</p>
+                <p>• Required approval for high-value items</p>
+                <p>• Document all transfers properly</p>
               </CardContent>
             </Card>
           </div>
