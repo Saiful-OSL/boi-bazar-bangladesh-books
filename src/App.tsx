@@ -26,6 +26,7 @@ import ViewOrder from "./pages/ViewOrder";
 import EditOrder from "./pages/EditOrder";
 import ViewStudent from "./pages/ViewStudent";
 import EditStudent from "./pages/EditStudent";
+import Reorder from "./pages/Reorder";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/reorder" element={<Reorder />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:orderId" element={<ViewOrder />} />
           <Route path="/orders/:orderId/edit" element={<EditOrder />} />

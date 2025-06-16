@@ -99,6 +99,12 @@ const Inventory = () => {
               <Plus className="h-4 w-4 mr-2" />
               Add Item
             </Button>
+            <Link to="/reorder">
+              <Button variant="outline" className="bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100">
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                Reorder Items
+              </Button>
+            </Link>
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
               Export
@@ -247,7 +253,9 @@ const Inventory = () => {
                         <td className="py-4 px-4">
                           <div className="flex gap-2">
                             <Button size="sm" variant="outline">Edit</Button>
-                            <Button size="sm" variant="outline">Reorder</Button>
+                            <Link to="/reorder">
+                              <Button size="sm" variant="outline">Reorder</Button>
+                            </Link>
                           </div>
                         </td>
                       </tr>
