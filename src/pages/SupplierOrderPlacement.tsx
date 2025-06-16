@@ -51,14 +51,13 @@ const SupplierOrderPlacement = () => {
   ];
 
   // Mock selected items if none provided
-  const orderItems = selectedItems.length > 0 ? selectedItems : [
+  const defaultItems = [
     {
       id: "ITM-001",
       name: "Higher Mathematics - Class XI",
       author: "Dr. Rahman Ahmed",
       quantity: 50,
       price: 850,
-      total: 42500,
       supplier: "Academic Publishers Ltd"
     },
     {
@@ -67,10 +66,17 @@ const SupplierOrderPlacement = () => {
       author: "Prof. Hassan Khan",
       quantity: 40,
       price: 650,
-      total: 26000,
       supplier: "Science Books House"
     }
   ];
+
+  // Process order items and ensure all have required properties
+  const orderItems = (selectedItems.length > 0 ? selectedItems : defaultItems).map(item => ({
+    ...item,
+    quantity: item.quantity || item.suggestedQuantity || 1,
+    price: item.price || 0,
+    total: item.total || (item.quantity || item.suggestedQuantity || 1) * (item.price || 0)
+  }));
 
   const selectedSupplier = suppliers.find(s => s.name === orderData.supplier);
   const totalAmount = orderItems.reduce((sum, item) => sum + item.total, 0);
