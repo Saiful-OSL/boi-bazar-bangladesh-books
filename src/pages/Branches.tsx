@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -272,7 +273,7 @@ const Branches = () => {
                           <div className="font-medium">{book.name}</div>
                           <div className="flex justify-between items-center mt-1">
                             <span className="text-gray-600">Qty: {book.quantity}</span>
-                            <Badge size="sm" className={getPriorityColor(book.priority)}>
+                            <Badge className={getPriorityColor(book.priority)}>
                               {book.priority}
                             </Badge>
                           </div>
@@ -415,7 +416,7 @@ const Branches = () => {
                           <div key={req.id} className="text-xs bg-gray-50 rounded p-2">
                             <div className="flex justify-between items-center">
                               <span>{req.totalItems} books requested</span>
-                              <Badge size="sm" className={getRequisitionStatusColor(req.status)}>
+                              <Badge className={getRequisitionStatusColor(req.status)}>
                                 {req.status}
                               </Badge>
                             </div>
